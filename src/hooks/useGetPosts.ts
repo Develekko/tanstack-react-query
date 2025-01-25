@@ -17,6 +17,7 @@ const useGetPosts = () => {
   const query = useQuery<DataItem[], Error>({
     queryKey: ["posts"],
     queryFn: fetchData,
+    staleTime: 1000 * 10,
   });
   return query;
 };
