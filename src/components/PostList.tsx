@@ -26,7 +26,7 @@ const PostList = () => {
         </tr>
       </thead>
       <tbody>
-        {data.map((el, idx) => (
+        {data?.map((el, idx) => (
           <tr key={el.id}>
             <td>{++idx}</td>
             <td>
