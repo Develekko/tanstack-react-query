@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
-
+import { type PostStatusType } from "../types/index";
 interface DataItem {
   id: number;
   title: string;
@@ -9,14 +9,23 @@ interface DataItem {
   topRate: boolean;
 }
 
-const fetchData = async (): Promise<DataItem[]> => {
-  const response = await axios.get<DataItem[]>("http://localhost:5005/posts");
-  return response.data;
+const fetchData = async (
+  selectedStatus: PostStatusType
+): Promise<DataItem[]> => {
+  if (selectedStatus === "all") {
+    const response = await axios.get<DataItem[]>("http://localhost:5005/posts");
+    return response.data;
+  } else {
+    const response = await axios.get<DataItem[]>(
+      `http://localhost:5005/posts?status=${selectedStatus}`
+    );
+    return response.data;
+  }
 };
-const useGetPosts = () => {
+const useGetPosts = (selectedStatus: PostStatusType) => {
   const query = useQuery<DataItem[], Error>({
-    queryKey: ["posts"],
-    queryFn: fetchData,
+    queryKey: ["posts", { selectedStatus }],
+    queryFn: () => fetchData(selectedStatus),
     staleTime: 1000 * 10,
   });
   return query;

@@ -2,9 +2,15 @@ import { useNavigate, Link } from "react-router-dom";
 import useGetPosts from "../hooks/useGetPosts";
 import { Table, Form, ButtonGroup, Button } from "react-bootstrap";
 
-const PostList = () => {
+import { PostStatusType } from "../types/index";
+
+interface PostListProps {
+  selectedPostStatus: PostStatusType;
+}
+
+const PostList = ({ selectedPostStatus }: PostListProps) => {
   const navigation = useNavigate();
-  const { isLoading, data, isError, error } = useGetPosts();
+  const { isLoading, data, isError, error } = useGetPosts(selectedPostStatus);
 
   if (isLoading) {
     return <p>loading please wait</p>;
