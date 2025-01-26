@@ -1,9 +1,10 @@
+import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import useGetPosts from "../hooks/useGetPosts";
 import useSearch from "../hooks/useSearch";
 
 import { PostStatusType } from "../types/index";
-import { Table, Form, ButtonGroup, Button } from "react-bootstrap";
+import { Table, Form, Button, ButtonGroup } from "react-bootstrap";
 
 interface PostListProps {
   selectedPostStatus: PostStatusType;
@@ -11,9 +12,15 @@ interface PostListProps {
 }
 
 const PostList = ({ selectedPostStatus, searchQuery }: PostListProps) => {
+  const [paginate, setPaginate] = useState(1);
+
   const navigation = useNavigate();
-  const { isLoading, data, isError, error, isStale, refetch } =
-    useGetPosts(selectedPostStatus);
+
+  const { isLoading, data, isError, error, isStale, refetch } = useGetPosts(
+    selectedPostStatus,
+    paginate
+  );
+
   const searchData = useSearch(searchQuery);
 
   if (isLoading || searchData.isLoading) {
@@ -105,6 +112,20 @@ const PostList = ({ selectedPostStatus, searchQuery }: PostListProps) => {
             ))}
         </tbody>
       </Table>
+
+      {searchQuery.length === 0 && selectedPostStatus === "all" && (
+        <ButtonGroup aria-label="Basic example">
+          <Button variant="light" onClick={() => setPaginate(1)}>
+            1
+          </Button>
+          <Button variant="light" onClick={() => setPaginate(2)}>
+            2
+          </Button>
+          <Button variant="light" onClick={() => setPaginate(3)}>
+            3
+          </Button>
+        </ButtonGroup>
+      )}
     </>
   );
 };

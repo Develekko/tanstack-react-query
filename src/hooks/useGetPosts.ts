@@ -3,10 +3,13 @@ import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import { DataItem, PostStatusType } from "../types/index";
 
 const fetchData = async (
-  selectedStatus: PostStatusType
+  selectedStatus: PostStatusType,
+  paginate: number
 ): Promise<DataItem[]> => {
   if (selectedStatus === "all") {
-    const response = await axios.get<DataItem[]>("http://localhost:5005/posts");
+    const response = await axios.get<DataItem[]>(
+      `http://localhost:5005/posts?_page=${paginate}&_limit=5`
+    );
     return response.data;
   } else {
     const response = await axios.get<DataItem[]>(
@@ -16,12 +19,13 @@ const fetchData = async (
   }
 };
 const useGetPosts = (
-  selectedStatus: PostStatusType
+  selectedStatus: PostStatusType,
+  paginate: number
 ): UseQueryResult<DataItem[]> => {
   return useQuery({
-    queryKey: ["posts", { selectedStatus }],
-    queryFn: () => fetchData(selectedStatus),
-    staleTime: 1000 * 10,
+    queryKey: ["posts", { selectedStatus, paginate }],
+    queryFn: () => fetchData(selectedStatus, paginate),
+    staleTime: 1000 * 60 * 5,
   });
 };
 
