@@ -1,13 +1,6 @@
 import axios from "axios";
-import { useQuery } from "@tanstack/react-query";
-import { type PostStatusType } from "../types/index";
-interface DataItem {
-  id: number;
-  title: string;
-  body: string;
-  status: "published" | "draft" | "block";
-  topRate: boolean;
-}
+import { useQuery, UseQueryResult } from "@tanstack/react-query";
+import { DataItem, PostStatusType } from "../types/index";
 
 const fetchData = async (
   selectedStatus: PostStatusType
@@ -22,13 +15,14 @@ const fetchData = async (
     return response.data;
   }
 };
-const useGetPosts = (selectedStatus: PostStatusType) => {
-  const query = useQuery<DataItem[], Error>({
+const useGetPosts = (
+  selectedStatus: PostStatusType
+): UseQueryResult<DataItem[]> => {
+  return useQuery({
     queryKey: ["posts", { selectedStatus }],
     queryFn: () => fetchData(selectedStatus),
     staleTime: 1000 * 10,
   });
-  return query;
 };
 
 export default useGetPosts;
