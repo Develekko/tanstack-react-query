@@ -1,7 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 import { useNavigate, Link } from "react-router-dom";
 import useGetPosts from "../hooks/useGetPosts";
 import useSearch from "../hooks/useSearch";
+import { fetchData } from "../hooks/useGetPosts";
 
 import { PostStatusType } from "../types/index";
 import { Table, Form, Button, ButtonGroup } from "react-bootstrap";
@@ -14,6 +16,8 @@ interface PostListProps {
 const PostList = ({ selectedPostStatus, searchQuery }: PostListProps) => {
   const [paginate, setPaginate] = useState(1);
 
+  const queryClient = useQueryClient();
+
   const navigation = useNavigate();
 
   const { isLoading, data, isError, error, isStale, refetch } = useGetPosts(
@@ -22,6 +26,15 @@ const PostList = ({ selectedPostStatus, searchQuery }: PostListProps) => {
   );
 
   const searchData = useSearch(searchQuery);
+
+  useEffect(() => {
+    const nextPage = paginate + 1;
+    if (nextPage > 3) return;
+    queryClient.prefetchQuery({
+      queryKey: ["posts", { selectedStatus: "all", paginate: nextPage }],
+      queryFn: () => fetchData("all", nextPage),
+    });
+  }, [paginate, queryClient]);
 
   if (isLoading || searchData.isLoading) {
     return <p>loading please wait</p>;
