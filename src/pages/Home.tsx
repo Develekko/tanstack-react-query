@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Row, Col } from "react-bootstrap";
 import PostList from "../components/PostList";
 import PostFilter from "../components/PostFilter";
@@ -22,10 +22,12 @@ const Home = () => {
       <Col>
         <SearchQuery setSearchQuery={setSearchQuery} />
         {searchQuery.length === 0 && (
-          <PostFilter
-            selectedPostStatus={selectedPostStatus}
-            setSelectedPostStatus={setSelectedPostStatus}
-          />
+          <>
+            <PostFilter
+              selectedPostStatus={selectedPostStatus}
+              setSelectedPostStatus={setSelectedPostStatus}
+            />
+          </>
         )}
       </Col>
     </Row>

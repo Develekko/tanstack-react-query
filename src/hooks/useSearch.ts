@@ -10,8 +10,8 @@ const useSearch = (q: string): UseQueryResult<DataItem[]> => {
   return useQuery({
     queryKey: ["posts", "search", { q }],
     queryFn: () => fetchData(q),
-    staleTime: 1000 * 60 * 5,
     enabled: q.length > 0,
+    refetchInterval: 1000 * 20,
   });
 };
 
