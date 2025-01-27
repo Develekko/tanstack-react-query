@@ -1,4 +1,8 @@
-import { useMutation, UseMutationResult } from "@tanstack/react-query";
+import {
+  useMutation,
+  UseMutationResult,
+  useQueryClient,
+} from "@tanstack/react-query";
 import axios, { AxiosError } from "axios";
 import { CommentPost, CommentResponse } from "../types";
 
@@ -15,10 +19,11 @@ const useAddComment = (): UseMutationResult<
   AxiosError,
   CommentPost
 > => {
+  const queryClint = useQueryClient();
   return useMutation({
     mutationFn: requestData,
-    onSuccess: (response) => {
-      console.log(response);
+    onSuccess: () => {
+      queryClint.invalidateQueries({ queryKey: ["comments"], exact: false });
     },
   });
 };
