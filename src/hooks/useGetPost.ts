@@ -20,7 +20,7 @@ const useGetPost = (
 ): UseQueryResult<DataItem> => {
   const queryClient = useQueryClient();
 
-  let getCashedData: DataItem[] | undefined = [];
+  let getCashedData: DataItem[] | undefined;
 
   if (paramType === "pagination") {
     getCashedData = queryClient.getQueryData([
