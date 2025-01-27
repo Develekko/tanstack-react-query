@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import useAddComment from "../hooks/useAddComment";
 import useGetPost from "../hooks/useGetPost";
+import useGetComments from "../hooks/useGetComments";
 
 import { Row, Col, Form, Button } from "react-bootstrap";
 const Info = () => {
@@ -17,6 +18,8 @@ const Info = () => {
     paramType,
     paramKey
   );
+
+  const getComments = useGetComments(id);
 
   const addComment = useAddComment();
 
@@ -67,8 +70,12 @@ const Info = () => {
               Submit
             </Button>
           </Form>
-          <p>Comment 1</p>
-          <p>Comment 2</p>
+
+          {getComments.isLoading ? (
+            <p>Loading Comments</p>
+          ) : (
+            getComments.data?.map((el) => <p>{el.body}</p>)
+          )}
         </Col>
       </Row>
     </div>
