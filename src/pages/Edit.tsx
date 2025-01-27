@@ -9,7 +9,7 @@ const Edit = () => {
             <Form.Label>Title</Form.Label>
             <Form.Control type="text" placeholder="Enter title" />
           </Form.Group>
-          <Form.Group className="mb-3" controlId="formBasicEmail">
+          <Form.Group className="mb-3">
             <Form.Label>Status</Form.Label>
             <Form.Select>
               <option value="">Select Status</option>
@@ -18,7 +18,7 @@ const Edit = () => {
               <option value="Blocked">Blocked</option>
             </Form.Select>
           </Form.Group>
-          <Form.Group className="mb-3" controlId="formBasicPassword">
+          <Form.Group className="mb-3">
             <Form.Label>Body</Form.Label>
             <Form.Control as="textarea" rows={3} />
           </Form.Group>
