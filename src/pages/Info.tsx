@@ -30,7 +30,14 @@ const Info = () => {
 
   const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    addComment.mutate({ body: comment, post_id: +id });
+    addComment.mutate(
+      { body: comment, post_id: +id },
+      {
+        onSuccess: () => {
+          setComment("");
+        },
+      }
+    );
   };
 
   return (
