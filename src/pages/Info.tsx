@@ -33,14 +33,8 @@ const Info = () => {
 
   const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    addComment.mutate(
-      { body: comment, post_id: +id },
-      {
-        onSuccess: () => {
-          setComment("");
-        },
-      }
-    );
+    setComment("");
+    addComment.mutate({ body: comment, post_id: +id });
   };
 
   return (
@@ -74,7 +68,7 @@ const Info = () => {
           {getComments.isLoading ? (
             <p>Loading Comments</p>
           ) : (
-            getComments.data?.map((el) => <p>{el.body}</p>)
+            getComments.data?.map((el) => <p key={el.id}>{el.body}</p>)
           )}
         </Col>
       </Row>
