@@ -36,7 +36,7 @@ const useGetPost = (
   }
 
   return useQuery({
-    queryKey: ["post", { id }],
+    queryKey: ["post", { id: +id }],
     queryFn: () => fetchData(id),
     initialData: () => {
       if (!getCashedData) {

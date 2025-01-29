@@ -34,7 +34,7 @@ const useAddComment = (): UseMutationResult<
       const comment = { ...data, id: new Date() };
 
       queryClint.setQueryData(
-        ["comments", { post_id: data.post_id.toString() }],
+        ["comments", { post_id: data.post_id }],
         (comments: CommentResponse[]) => {
           return [comment, ...comments];
         }
@@ -43,7 +43,7 @@ const useAddComment = (): UseMutationResult<
       //the rollback
       return () => {
         queryClint.setQueryData(
-          ["comments", { post_id: data.post_id.toString() }],
+          ["comments", { post_id: data.post_id }],
           savedComments
         );
       };
