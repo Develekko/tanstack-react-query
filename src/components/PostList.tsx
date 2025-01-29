@@ -3,6 +3,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useNavigate, Link } from "react-router-dom";
 import useGetPosts from "../hooks/useGetPosts";
 import useSearch from "../hooks/useSearch";
+import useUpdateRate from "../hooks/useUpdateRate";
 import { fetchData } from "../hooks/useGetPosts";
 
 import { PostStatusType } from "../types/index";
@@ -24,6 +25,8 @@ const PostList = ({ selectedPostStatus, searchQuery }: PostListProps) => {
     selectedPostStatus,
     paginate
   );
+
+  const updateRate = useUpdateRate();
 
   const searchData = useSearch(searchQuery);
 
@@ -81,8 +84,15 @@ const PostList = ({ selectedPostStatus, searchQuery }: PostListProps) => {
                 <td style={{ textAlign: "center" }}>
                   <Form.Check // prettier-ignore
                     type="switch"
-                    onChange={() => console.log("")}
+                    onChange={(e) =>
+                      updateRate.mutate({
+                        postId: el.id,
+                        rateValue: e.target.checked,
+                        pageNumber: paginate,
+                      })
+                    }
                     checked={el.topRate}
+                    disabled={selectedPostStatus !== "all"}
                   />
                 </td>
                 <td>
