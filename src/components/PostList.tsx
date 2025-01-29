@@ -104,7 +104,7 @@ const PostList = ({ selectedPostStatus, searchQuery }: PostListProps) => {
               <tr key={el.id}>
                 <td>{++idx}</td>
                 <td>
-                  <Link to={`/info?id=${el.id}?type=search&key=${searchQuery}`}>
+                  <Link to={`/info?id=${el.id}&type=search&key=${searchQuery}`}>
                     {el.title}
                   </Link>
                 </td>
