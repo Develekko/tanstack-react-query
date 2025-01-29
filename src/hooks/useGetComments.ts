@@ -12,7 +12,7 @@ const fetchData = async (post_id: string): Promise<CommentResponse[]> => {
 
 const useGetComments = (post_id: string): UseQueryResult<CommentResponse[]> => {
   return useQuery({
-    queryKey: ["comments", { post_id }],
+    queryKey: ["comments", { post_id: +post_id }],
     queryFn: () => fetchData(post_id),
   });
 };
