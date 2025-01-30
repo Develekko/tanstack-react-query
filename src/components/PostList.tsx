@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { useQueryClient } from "@tanstack/react-query";
-import { useNavigate, Link } from "react-router-dom";
+import { useQueryClient, useIsFetching } from "@tanstack/react-query";
+import { Link } from "react-router-dom";
 import useGetPosts from "../hooks/useGetPosts";
 import useSearch from "../hooks/useSearch";
 import useUpdateRate from "../hooks/useUpdateRate";
@@ -20,9 +20,9 @@ const PostList = ({ selectedPostStatus, searchQuery }: PostListProps) => {
 
   const queryClient = useQueryClient();
 
-  const navigation = useNavigate();
+  const loading = useIsFetching();
 
-  const { isLoading, data, isError, error, isStale, refetch } = useGetPosts(
+  const { data, isError, error, isStale, refetch } = useGetPosts(
     selectedPostStatus,
     paginate
   );
@@ -42,7 +42,7 @@ const PostList = ({ selectedPostStatus, searchQuery }: PostListProps) => {
     });
   }, [paginate, queryClient]);
 
-  if (isLoading || searchData.isLoading || deletePost.isPending) {
+  if (loading) {
     return <p>loading please wait</p>;
   }
 
@@ -131,12 +131,6 @@ const PostList = ({ selectedPostStatus, searchQuery }: PostListProps) => {
                 </td>
                 <td>
                   <ButtonGroup aria-label="Basic example">
-                    <Button
-                      variant="success"
-                      onClick={() => navigation("/edit")}
-                    >
-                      Edit
-                    </Button>
                     <Button variant="danger">Delete</Button>
                   </ButtonGroup>
                 </td>
