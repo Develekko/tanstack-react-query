@@ -1,4 +1,4 @@
-import { useNavigate, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import useGetPosts from "../hooks/useGetPosts";
 import useSearch from "../hooks/useSearch";
 
@@ -11,7 +11,6 @@ interface PostListProps {
 }
 
 const PostList = ({ selectedPostStatus, searchQuery }: PostListProps) => {
-  const navigation = useNavigate();
   const { isLoading, data, isError, error } = useGetPosts(selectedPostStatus);
   const searchData = useSearch(searchQuery);
 
@@ -56,9 +55,6 @@ const PostList = ({ selectedPostStatus, searchQuery }: PostListProps) => {
               </td>
               <td>
                 <ButtonGroup aria-label="Basic example">
-                  <Button variant="success" onClick={() => navigation("/edit")}>
-                    Edit
-                  </Button>
                   <Button variant="danger">Delete</Button>
                 </ButtonGroup>
               </td>
@@ -82,9 +78,6 @@ const PostList = ({ selectedPostStatus, searchQuery }: PostListProps) => {
               </td>
               <td>
                 <ButtonGroup aria-label="Basic example">
-                  <Button variant="success" onClick={() => navigation("/edit")}>
-                    Edit
-                  </Button>
                   <Button variant="danger">Delete</Button>
                 </ButtonGroup>
               </td>
