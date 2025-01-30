@@ -15,9 +15,6 @@ const Main = () => {
               <Nav.Link as={NavLink} to="/">
                 Home
               </Nav.Link>
-              <Nav.Link as={NavLink} to="/create">
-                New Post
-              </Nav.Link>
             </Nav>
           </Navbar.Collapse>
         </Container>

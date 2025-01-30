@@ -1,9 +1,7 @@
-import { useNavigate, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Table, Row, Col, Form, ButtonGroup, Button } from "react-bootstrap";
 
 const Home = () => {
-  const navigation = useNavigate();
-
   return (
     <Row>
       <Col xs={9}>
@@ -29,9 +27,6 @@ const Home = () => {
               </td>
               <td>
                 <ButtonGroup aria-label="Basic example">
-                  <Button variant="success" onClick={() => navigation("/edit")}>
-                    Edit
-                  </Button>
                   <Button variant="danger">Delete</Button>
                 </ButtonGroup>
               </td>
