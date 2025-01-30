@@ -4,6 +4,7 @@ import { useNavigate, Link } from "react-router-dom";
 import useGetPosts from "../hooks/useGetPosts";
 import useSearch from "../hooks/useSearch";
 import useUpdateRate from "../hooks/useUpdateRate";
+import useRemovePost from "../hooks/useRemovePost";
 import { fetchData } from "../hooks/useGetPosts";
 
 import { PostStatusType } from "../types/index";
@@ -28,6 +29,8 @@ const PostList = ({ selectedPostStatus, searchQuery }: PostListProps) => {
 
   const updateRate = useUpdateRate();
 
+  const deletePost = useRemovePost();
+
   const searchData = useSearch(searchQuery);
 
   useEffect(() => {
@@ -39,7 +42,7 @@ const PostList = ({ selectedPostStatus, searchQuery }: PostListProps) => {
     });
   }, [paginate, queryClient]);
 
-  if (isLoading || searchData.isLoading) {
+  if (isLoading || searchData.isLoading || deletePost.isPending) {
     return <p>loading please wait</p>;
   }
 
@@ -98,12 +101,12 @@ const PostList = ({ selectedPostStatus, searchQuery }: PostListProps) => {
                 <td>
                   <ButtonGroup aria-label="Basic example">
                     <Button
-                      variant="success"
-                      onClick={() => navigation("/edit")}
+                      variant="danger"
+                      disabled={selectedPostStatus !== "all"}
+                      onClick={() => deletePost.mutate(el.id)}
                     >
-                      Edit
+                      Delete
                     </Button>
-                    <Button variant="danger">Delete</Button>
                   </ButtonGroup>
                 </td>
               </tr>
