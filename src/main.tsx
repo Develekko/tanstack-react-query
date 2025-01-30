@@ -8,7 +8,6 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import Main from "./layouts/Main";
 import Home from "./pages/Home";
 import Create from "./pages/Create";
-import Edit from "./pages/Edit";
 import Info from "./pages/Info";
 
 const router = createBrowserRouter([
@@ -23,10 +22,6 @@ const router = createBrowserRouter([
       {
         path: "/create",
         element: <Create />,
-      },
-      {
-        path: "/edit",
-        element: <Edit />,
       },
       {
         path: "/info",
