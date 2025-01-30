@@ -1,9 +1,8 @@
-import { useNavigate, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import useGetPosts from "../hooks/useGetPosts";
 import { Table, Form, ButtonGroup, Button } from "react-bootstrap";
 
 const PostList = () => {
-  const navigation = useNavigate();
   const { isLoading, data, isError, error } = useGetPosts();
 
   if (isLoading) {
@@ -42,9 +41,6 @@ const PostList = () => {
             </td>
             <td>
               <ButtonGroup aria-label="Basic example">
-                <Button variant="success" onClick={() => navigation("/edit")}>
-                  Edit
-                </Button>
                 <Button variant="danger">Delete</Button>
               </ButtonGroup>
             </td>
