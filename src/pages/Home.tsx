@@ -23,7 +23,9 @@ const Home = () => {
               </td>
               <td>Otto</td>
               <td style={{ textAlign: "center" }}>
-                <Form.Check type="checkbox" />
+                <Form.Check // prettier-ignore
+                  type="switch"
+                />
               </td>
               <td>
                 <ButtonGroup aria-label="Basic example">
