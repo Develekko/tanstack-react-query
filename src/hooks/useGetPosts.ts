@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, UseQueryResult } from "@tanstack/react-query";
 
 interface DataItem {
   id: number;
@@ -13,8 +13,8 @@ const fetchData = async (): Promise<DataItem[]> => {
   const response = await axios.get<DataItem[]>("http://localhost:5005/posts");
   return response.data;
 };
-const useGetPosts = () => {
-  const query = useQuery<DataItem[], Error>({
+const useGetPosts = (): UseQueryResult<DataItem[]> => {
+  const query = useQuery({
     queryKey: ["posts"],
     queryFn: fetchData,
   });
