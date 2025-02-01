@@ -23,6 +23,7 @@ const useGetPosts = (
     queryKey: ["posts", { selectedStatus }],
     queryFn: () => fetchPosts(selectedStatus),
     staleTime: 1000 * 10,
+    refetchInterval: 1000 * 15,
   });
 };
 
