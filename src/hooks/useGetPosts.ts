@@ -1,21 +1,29 @@
 import axios from "axios";
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
+import { DataItem, PostStatusType } from "../types";
 
-interface DataItem {
-  id: number;
-  title: string;
-  body: string;
-  status: "published" | "draft" | "block";
-  topRate: boolean;
-}
-
-const fetchPosts = async (): Promise<DataItem[]> => {
-  const result = await axios.get<DataItem[]>("http://localhost:5005/posts");
-  return result.data;
+const fetchPosts = async (
+  selectedStatus: PostStatusType
+): Promise<DataItem[]> => {
+  if (selectedStatus === "all") {
+    const result = await axios.get<DataItem[]>("http://localhost:5005/posts");
+    return result.data;
+  } else {
+    const result = await axios.get<DataItem[]>(
+      `http://localhost:5005/posts?status=${selectedStatus}`
+    );
+    return result.data;
+  }
 };
 
-const useGetPosts = (): UseQueryResult<DataItem[]> => {
-  return useQuery({ queryKey: ["posts"], queryFn: fetchPosts });
+const useGetPosts = (
+  selectedStatus: PostStatusType
+): UseQueryResult<DataItem[]> => {
+  return useQuery({
+    queryKey: ["posts", { selectedStatus }],
+    queryFn: () => fetchPosts(selectedStatus),
+    staleTime: 1000 * 10,
+  });
 };
 
 export default useGetPosts;

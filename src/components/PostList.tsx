@@ -1,9 +1,12 @@
 import { Link } from "react-router-dom";
 import useGetPosts from "../hooks/useGetPosts";
 import { Table, Form, ButtonGroup, Button } from "react-bootstrap";
-
-const PostList = () => {
-  const { data, isLoading, isError, error } = useGetPosts();
+import { PostStatusType } from "../types";
+interface PostListProps {
+  selectedPostStatus: PostStatusType;
+}
+const PostList = ({ selectedPostStatus }: PostListProps) => {
+  const { data, isLoading, isError, error } = useGetPosts(selectedPostStatus);
 
   if (isLoading) {
     return <div>loading please wait</div>;
@@ -25,8 +28,8 @@ const PostList = () => {
         </tr>
       </thead>
       <tbody>
-        {data.map((el, idx) => (
-          <tr>
+        {data?.map((el, idx) => (
+          <tr key={el.id}>
             <td>{++idx}</td>
             <td>
               <Link to="/info">{el.title}</Link>
