@@ -1,6 +1,9 @@
+import { useState, useEffect } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import useGetPosts from "../hooks/useGetPosts";
 import useSearch from "../hooks/useSearch";
+import { fetchPosts } from "../hooks/useGetPosts";
 import { PostStatusType } from "../types";
 import { Table, Form, ButtonGroup, Button } from "react-bootstrap";
 interface PostListProps {
@@ -8,9 +11,25 @@ interface PostListProps {
   searchQuery: string;
 }
 const PostList = ({ selectedPostStatus, searchQuery }: PostListProps) => {
-  const { data, isLoading, isError, error, isStale, refetch } =
-    useGetPosts(selectedPostStatus);
+  const [paginate, setPaginate] = useState(1);
+
+  const queryClient = useQueryClient();
+
+  const { data, isLoading, isError, error, isStale, refetch } = useGetPosts(
+    selectedPostStatus,
+    paginate
+  );
+
   const searchData = useSearch(searchQuery);
+
+  useEffect(() => {
+    const nextPage = paginate + 1;
+    if (nextPage > 3) return;
+    queryClient.prefetchQuery({
+      queryKey: ["posts", { paginate: nextPage, selectedStatus: "all" }],
+      queryFn: () => fetchPosts("all", nextPage),
+    });
+  }, [paginate, queryClient]);
 
   if (isLoading || searchData.isLoading) {
     return <div>loading please wait</div>;
@@ -47,7 +66,9 @@ const PostList = ({ selectedPostStatus, searchQuery }: PostListProps) => {
               <tr key={el.id}>
                 <td>{++idx}</td>
                 <td>
-                  <Link to="/info">{el.title}</Link>
+                  <Link to={`/info?id=${el.id}&type=paginate&key=${paginate}`}>
+                    {el.title}
+                  </Link>
                 </td>
                 <td>{el.status}</td>
                 <td style={{ textAlign: "center" }}>
@@ -66,7 +87,9 @@ const PostList = ({ selectedPostStatus, searchQuery }: PostListProps) => {
               <tr key={el.id}>
                 <td>{++idx}</td>
                 <td>
-                  <Link to="/info">{el.title}</Link>
+                  <Link to={`/info?id=${el.id}&type=search&key=${searchQuery}`}>
+                    {el.title}
+                  </Link>
                 </td>
                 <td>{el.status}</td>
                 <td style={{ textAlign: "center" }}>
@@ -81,6 +104,19 @@ const PostList = ({ selectedPostStatus, searchQuery }: PostListProps) => {
             ))}
         </tbody>
       </Table>
+      {searchQuery.length === 0 && selectedPostStatus === "all" && (
+        <ButtonGroup aria-label="Basic example">
+          <Button variant="light" onClick={() => setPaginate(1)}>
+            1
+          </Button>
+          <Button variant="light" onClick={() => setPaginate(2)}>
+            2
+          </Button>
+          <Button variant="light" onClick={() => setPaginate(3)}>
+            3
+          </Button>
+        </ButtonGroup>
+      )}
     </>
   );
 };
