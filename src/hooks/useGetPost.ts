@@ -22,7 +22,7 @@ const useGetPost = (
 
   let getCashedData: DataItem[] | undefined;
 
-  if (paramType === "pagination") {
+  if (paramType === "paginate") {
     getCashedData = queryClient.getQueryData([
       "posts",
       { paginate: +paramKey, selectedStatus: "all" },
@@ -34,6 +34,7 @@ const useGetPost = (
       { q: paramKey },
     ]);
   }
+  console.log(getCashedData);
 
   return useQuery({
     queryKey: ["post", { id: +id }],
