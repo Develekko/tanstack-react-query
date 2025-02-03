@@ -23,6 +23,34 @@ const useAddComment = (): UseMutationResult<
 
   return useMutation({
     mutationFn: requestData,
+    onMutate: (data) => {
+      // old dat
+      const savedComments = queryClient.getQueryData([
+        "comments",
+        { post_id: data.post_id },
+      ]);
+
+      const newComments = { ...data, id: new Date() };
+
+      queryClient.setQueryData(
+        ["comments", { post_id: data.post_id }],
+        (comments: CommentResponse[]) => {
+          return [newComments, ...comments];
+        }
+      );
+
+      return () => {
+        queryClient.setQueryData(
+          ["comments", { post_id: data.post_id }],
+          savedComments
+        );
+      };
+    },
+    onError: (_, __, rollBack) => {
+      if (rollBack) {
+        rollBack();
+      }
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["comments"], exact: false });
     },
