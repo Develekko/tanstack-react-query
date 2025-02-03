@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import useGetPosts from "../hooks/useGetPosts";
 import useSearch from "../hooks/useSearch";
 import { fetchPosts } from "../hooks/useGetPosts";
+import useUpdateRate from "../hooks/useUpdateRate";
 import { PostStatusType } from "../types";
 import { Table, Form, ButtonGroup, Button } from "react-bootstrap";
 interface PostListProps {
@@ -21,6 +22,8 @@ const PostList = ({ selectedPostStatus, searchQuery }: PostListProps) => {
   );
 
   const searchData = useSearch(searchQuery);
+
+  const updateRate = useUpdateRate();
 
   useEffect(() => {
     const nextPage = paginate + 1;
@@ -72,7 +75,18 @@ const PostList = ({ selectedPostStatus, searchQuery }: PostListProps) => {
                 </td>
                 <td>{el.status}</td>
                 <td style={{ textAlign: "center" }}>
-                  <Form.Check type="switch" checked={el.topRate} />
+                  <Form.Check
+                    type="switch"
+                    checked={el.topRate}
+                    disabled={selectedPostStatus !== "all"}
+                    onChange={(e) =>
+                      updateRate.mutate({
+                        postId: el.id,
+                        rateValue: e.target.checked,
+                        pageNumber: paginate,
+                      })
+                    }
+                  />
                 </td>
                 <td>
                   <ButtonGroup aria-label="Basic example">
@@ -93,7 +107,11 @@ const PostList = ({ selectedPostStatus, searchQuery }: PostListProps) => {
                 </td>
                 <td>{el.status}</td>
                 <td style={{ textAlign: "center" }}>
-                  <Form.Check type="switch" checked={el.topRate} />
+                  <Form.Check
+                    type="switch"
+                    checked={el.topRate}
+                    disabled={searchQuery.length > 0}
+                  />
                 </td>
                 <td>
                   <ButtonGroup aria-label="Basic example">
